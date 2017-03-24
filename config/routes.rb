@@ -3,6 +3,7 @@ mount Attachinary::Engine => "/attachinary"
   resources :cocktails do
 
     resources :doses
+    resources :reviews
 
   end
 

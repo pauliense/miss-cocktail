@@ -1,22 +1,62 @@
 <%= @cocktail.name %>
 
+<%#= link_to "Edit this cocktail", edit_cocktail_path(@cocktail)%>
+
+
+
+
+
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+  <i class="fa fa-pencil" aria-hidden="true"></i>
+
+</button>
+<div class="collapse" id="collapseExample2">
+  <div class="well">
+    <%= simple_form_for @cocktail  do |f| %>
+    <%= f.error_notification %>
+    <%= f.text_field :name %>
+    <%= f.input :photo, as: :attachinary %>
+    <%= f.submit "Change!", class:"btn btn-primary"%>
+    <% end %>
+  </div>
+</div>
+
+
+
+<button type="button" class="btn btn-primary">
+
+ <%= link_to cocktail_path(@cocktail),
+ method: :delete,
+ data: { confirm: "Are you sure you want to delete the yummy #{@cocktail.name}?" } do %>
+ <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+ <% end %>
+
+</button>
 
 <% if @cocktail.photo? %>
-  <%= cl_image_tag @cocktail.photo.path, width: 200, height: 300, crop: :fill %>
+<%= cl_image_tag @cocktail.photo.path, width: 200, height: 300, crop: :fill %>
 <% end %>
 
+<br>
 
+<h3>Ingredients</h3>
 
-<h4>Which ingredient would you like to add to the cocktail?</h4>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+  Add some ingredients!
+</button>
+<div class="collapse" id="collapseExample">
+  <div class="well">
+    <h4>Which ingredient would you like to add to the cocktail?</h4>
 
-<%= simple_form_for ([@cocktail, @dose]) do |f| %>
-<%= f.error_notification %>
-  <%= f.collection_select :ingredient_id, @ingredients, :id, :name%>
-  <%= f.text_field :description %>
-  <%= f.submit class:"btn btn-primary"%>
-<% end %>
-
-
+    <%= simple_form_for ([@cocktail, @dose]) do |f| %>
+    <%= f.error_notification %>
+    <%= f.collection_select :ingredient_id, @ingredients, :id, :name%>
+    <%= f.text_field :description %>
+    <%= f.submit class:"btn btn-primary"%>
+    <% end %>
+  </div>
+</div>
 
 <% if @cocktail.ingredients.empty? %>
 
@@ -24,28 +64,81 @@
 
 <% else %>
 
-
-<h3>Ingredients</h3>
 <ul>
-<% @cocktail.doses.each do |dose| %>
-<li><h4>
-<%= dose.ingredient.name %> :
+  <% @cocktail.doses.each do |dose| %>
+  <li>
+    <h4>
+      <%= dose.ingredient.name %> :
+      <%= dose.description %>
+
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example2-modal-lg">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+
+      </button>
+
+      <div class="modal fade bs-example2-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+
+
+            <h3> You are now using <em><%= @dose.description %></em> of <%= dose.ingredient.name %>.
+              How much do you actually want to use?
+
+            </h3>
+
+            <%= simple_form_for ([@cocktail, dose])  do |f| %>
+            <%= f.error_notification %>
+            <%= f.text_field :description %>
+            <%= f.submit class:"btn btn-primary"%>
+            <% end %>
 
 
 
-<%= dose.description %>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary">
+        <%= link_to cocktail_dose_path(@cocktail, dose),
+        method: :delete,
+        data: { confirm: "Are you sure you want to delete the #{dose.ingredient.name}?" } do %>
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+        <% end %></button>
+      </h4>
+    </li>
+    <% end %>
+  </ul>
+
+  <% end %>
 
 
 
-</h4>
- <%= link_to "Change the amount of #{dose.ingredient.name}" , edit_cocktail_dose_path(@cocktail, dose) %>
- <br/>
- <%= link_to "Delete the #{dose.ingredient.name}", cocktail_dose_path(@cocktail, dose),
-      method: :delete,
-      data: { confirm: "Are you sure?" } %>
 
-      </li>
-<% end %>
-</ul>
+  <h2>
 
-<% end %>
+
+    <%= simple_form_for ([@cocktail, @review])  do |f| %>
+    <%= f.error_notification %>
+    <%= f.text_field :content %>
+    <%= f.submit class:"btn btn-primary"%>
+    <% end %>
+
+
+  </h2>
+
+
+  <ul>
+
+    <%  @reviews.each do |review| %>
+
+    <li>
+      <%= review.content %>
+    </li>
+    <% end %>
+
+  </ul>
+
+
+

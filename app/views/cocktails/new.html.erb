@@ -5,7 +5,7 @@ this is where the form goes
 <h2>Come on dude, give me a cocktail name!</h2>
 
 
-<%= form_for @cocktail do |f| %>
+<%= simple_form_for @cocktail do |f| %>
   <%= f.text_field :name %>
   <%= f.input :photo, as: :attachinary %>
   <%= f.submit class:"btn btn-primary"%>

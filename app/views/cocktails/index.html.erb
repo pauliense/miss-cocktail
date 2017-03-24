@@ -1,7 +1,29 @@
+
+<ul>
 <% @cocktails.each do |cocktail|%>
+
+
+<li>
 <%= link_to cocktail.name, cocktail_path(cocktail) %>
+
+<%= link_to cocktail_path(cocktail),
+      method: :delete,
+      data: { confirm: "Are you sure you want to delete the yummy #{cocktail.name}?" } do %>
+
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+
 <% end %>
+
+      </li>
+<% end %>
+</ul>
 
 <h2>
   <%= link_to "Create a cocktail!", new_cocktail_path  %>
 </h2>
+
+
+
+
+
+

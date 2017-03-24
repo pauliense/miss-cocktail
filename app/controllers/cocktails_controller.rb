@@ -1,13 +1,16 @@
 class CocktailsController < ApplicationController
 
+before_action :find_cocktail, only: [:show, :edit, :update, :destroy]
+
   def index
     @cocktails = Cocktail.all
   end
 
   def show
-    find_cocktail
+    @review = Review.new
+    @reviews = Review.all
     @dose = Dose.new
-    @ingredients = Ingredient.all - @cocktail.ingredients
+    @ingredients = Ingredient.not_own(@cocktail)
   end
 
   def new
@@ -21,6 +24,25 @@ class CocktailsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+  end
+
+  def update
+    @cocktail.update(cocktail_params)
+    if @cocktail.save
+      redirect_to cocktail_path(@cocktail)
+    else
+      # show them the form again with all their data & an error message
+      render :new
+    end
+  end
+
+
+  def destroy
+    @cocktail.destroy
+    redirect_to cocktails_path
   end
 
   private
