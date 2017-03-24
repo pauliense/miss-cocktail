@@ -1,0 +1,47 @@
+<%= @cocktail.name %>
+
+
+
+
+<h4>Which ingredient would you like to add to the cocktail?</h4>
+
+<%= simple_form_for ([@cocktail, @dose]) do |f| %>
+<%= f.error_notification %>
+  <%= f.collection_select :ingredient_id, @ingredients, :id, :name%>
+  <%= f.text_field :description %>
+  <%= f.submit class:"btn btn-primary"%>
+<% end %>
+
+
+
+<% if @cocktail.ingredients.empty? %>
+
+<p>no ingredients yet dude</p>
+
+<% else %>
+
+
+<h3>Ingredients</h3>
+<ul>
+<% @cocktail.doses.each do |dose| %>
+<li><h4>
+<%= dose.ingredient.name %> :
+
+
+
+<%= dose.description %>
+
+
+
+</h4>
+ <%= link_to "Change the amount of #{dose.ingredient.name}" , edit_cocktail_dose_path(@cocktail, dose) %>
+ <br/>
+ <%= link_to "Delete the #{dose.ingredient.name}", cocktail_dose_path(@cocktail, dose),
+      method: :delete,
+      data: { confirm: "Are you sure?" } %>
+
+      </li>
+<% end %>
+</ul>
+
+<% end %>

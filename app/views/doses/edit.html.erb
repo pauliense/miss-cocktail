@@ -1,0 +1,13 @@
+
+<h2><%= link_to @cocktail.name, cocktail_path(@cocktail)%></h2>
+
+<h3> You are now using <em><%= @dose.description %></em> of <%= @dose.ingredient.name %>.
+How much do you actually want to use?
+
+</h3>
+
+<%= simple_form_for ([@cocktail, @dose])  do |f| %>
+<%= f.error_notification %>
+  <%= f.text_field :description %>
+  <%= f.submit class:"btn btn-primary"%>
+<% end %>
